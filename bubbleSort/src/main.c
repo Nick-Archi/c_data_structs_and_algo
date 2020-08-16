@@ -18,12 +18,19 @@ int main(int argc, char * argv[])
 	return 0;
 }
 
+/*
+* @brief bubble sort will initially start off as false, and then
+* 		 assume that the array is sorted until it encounters an
+*		 unsorted value
+*	
+* @post array will be sorted from least to greatest
+*/
 void bubbleSort(int * array)
 {
 	uint8_t sorted = 0;
 
 	while(!sorted)
-	{
+	{		
 		sorted = 1;
 		for(int i = 0; i < SIZE; i++)
 		{
@@ -36,6 +43,11 @@ void bubbleSort(int * array)
 	}
 }
 
+/*
+* @brief swap two interger values
+*
+* @post interger values have swapped positions
+*/
 void swap(int * val1, int * val2)
 {
 	*val1 = *val1 + *val2;	
@@ -43,6 +55,11 @@ void swap(int * val1, int * val2)
 	*val1 = *val1 - *val2; 
 }
 
+/*
+* @brief print the array of SIZE values
+*
+* @post array will be printed to standard out
+*/
 void printArray(int array[])
 {
 	printf("Array =>");
