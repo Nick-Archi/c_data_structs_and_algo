@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define SIZE 4
+/* SIZE will not be 0-indexed */
+#define SIZE 6
 
 int globalCalls = 0;
 
@@ -12,15 +13,15 @@ void printArray(int input[]);
 
 int main(int argc, char * argv[])
 {
-	int input[SIZE] = {8, 7, 1, 5};	
+	int input[SIZE] = {8, 7, 1, 5, 9, 2};	
 	int * output = malloc(sizeof(int) * SIZE);
 
 	printf("Before mergeSort\n");
 	printArray(input);
 
 	mergeSort(input, 0, SIZE-1, output);
-	printf("After mergeSort\n");
 
+	printf("After mergeSort\n");
 	printArray(output);
 
 	return 0;
@@ -56,24 +57,15 @@ void mergeSort(int input[], int left, int right, int output[])
 
 void merge(int input[], int left, int right, int mid, int output[])
 {
-	// copy left & right positions
+	// copy left & mid positions
 	int copyL = left;
-	int copyR = right;
+	int copyR = mid+1;
 	
-	printf("=======Merge=========\n");
-	printf("copyL = {%d}\n", copyL);
-	printf("copyR = {%d}\n", copyR);
-	printf("mid = {%d}\n", mid);
-
 	// copy current left position
 	int curr = left;
 
-	printf("curr = {%d}", curr);
-
-	getchar();
-
 	// loop through input to make comparisions
-	while((copyL <= mid) && (copyR > mid) && (curr < right))
+	while((copyL <= mid) && (copyR <= right))
 	{
 		// compare the input values
 		if(input[copyL] < input[copyR])
@@ -84,7 +76,7 @@ void merge(int input[], int left, int right, int mid, int output[])
 		else
 		{
 			output[curr] = input[copyR];
-			copyR--;
+			copyR++;
 		}
 
 		curr++;
@@ -98,10 +90,10 @@ void merge(int input[], int left, int right, int mid, int output[])
 		curr++;
 	}
 
-	while(copyR > mid)
+	while(copyR <= right)
 	{
 		output[curr] = input[copyR];
-		copyR--;
+		copyR++;
 		curr++;
 	}
 
@@ -112,9 +104,6 @@ void merge(int input[], int left, int right, int mid, int output[])
 		input[reflect] = output[reflect];
 		reflect++;
 	}
-
-	printArray(output);
-	printf("=======Merge=========\n");
 }
 
 void printArray(int input[])
