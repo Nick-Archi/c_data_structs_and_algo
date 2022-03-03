@@ -28,7 +28,6 @@ bucket * table[TABLESIZE] = {NULL};
 // function to initialize space for linked list
 bucket * init_bucket(void)
 {
-    // initialize a head for the table...
     bucket * temp = (bucket *)malloc(sizeof(bucket));
     memset(temp, 0x00, sizeof(bucket));
     return temp;
@@ -43,7 +42,7 @@ uint32_t hash(char * name)
     {
         hash_val += (int)name[i];
     }
-    return (hash_val * name[0]) % TABLESIZE;
+    return (hash_val * (int)name[0]) % TABLESIZE;
 }
 
 // function to create a new node
@@ -64,17 +63,15 @@ uint8_t insert(char * name, uint32_t val)
 
     // compute hash
     uint32_t hash_val = hash(name);
-    printf("hash_val=%u\n",hash_val);
    
     // create new node
     node * entry = create_node(name, (int)val); 
 
     // check that top is not empty...
-    bucket * table_top = table[hash_val];
 
-    // initialize memory location...
     if(table[hash_val] == NULL)
     {
+        // initialize memory location...
         table[hash_val] = init_bucket();
         table[hash_val]->head = entry;
         table[hash_val]->entries = 1;
@@ -84,6 +81,7 @@ uint8_t insert(char * name, uint32_t val)
     // else search for an empty spot...
     else
     {
+        bucket * table_top = table[hash_val];
         node * curr = table_top->head;
         node * prev = NULL;
         while(curr != NULL)
@@ -111,11 +109,12 @@ uint8_t delete(char * name, uint32_t val)
 
     // grab the head...
     bucket * table_top = table[hash_val];
-    node * curr = table_top->head;
 
     // determine if empty
     if(table_top == NULL)
     { return retVal = 1;}
+    
+    node * curr = table_top->head;
 
     // if top is entry...
     if(!(strcmp(curr->name, name)) && (curr->val == val))
@@ -142,12 +141,12 @@ uint8_t delete(char * name, uint32_t val)
     {
         // search for entry
         node * prev = NULL;
-        printf("strcmp=%d\n",strcmp(curr->name, "J"));
-        while((strcmp(curr->name, name) != 0) || (curr->val != val))
+        while(((strcmp(curr->name, name) != 0) || (curr->val != val)) && curr != NULL)
         {
             prev = curr;
             curr = curr->next;
         }
+        
         prev->next = curr->next;
         table_top->entries--;
         free(curr);
@@ -172,6 +171,5 @@ void print_table(void)
             printf("Entry: %d - Name: NULL - Val: NULL\n", i); 
         }
     }
-
     printf("======table======\n");
 }

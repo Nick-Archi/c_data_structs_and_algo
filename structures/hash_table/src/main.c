@@ -46,9 +46,7 @@ void test_hash_table_ll()
     // fill table with entries...
     insert("Jenny", 10);
     insert("Jenny", 20);
-    insert("Jenny", 20);
     print_table();
-
-    printf("%u\n", delete("Jenny", 20));
+    delete("Jenny", 10);
     print_table();
 }
