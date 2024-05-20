@@ -1,0 +1,82 @@
+#include "stdlib.h"
+#include "stdio.h"
+#include "stdint.h"
+
+typedef struct node_t
+{
+    uint32_t val;
+    struct node_t * next;
+}node;
+
+typedef struct list_t
+{
+    node * top;
+    node * last;
+}list;
+
+node * create_node(uint32_t val)
+{
+    node * newNode = malloc(sizeof(node));
+
+    newNode->val = val;
+    newNode->next = NULL;
+
+    return newNode;
+}
+
+int is_empty(list * stack)
+{
+    return (stack->top == NULL) ? 1 : 0; 
+}
+
+int enqueue(uint32_t val, list * stack)
+{
+
+    node * newNode = create_node(val);
+
+    if(is_empty(stack))
+    {
+        stack->top = newNode;
+        stack->last = newNode;
+    }
+
+    else
+    {
+        stack->last->next = newNode;
+        stack->last = newNode;
+    }
+    
+    return 0;
+}
+
+node * dequeue(list * stack)
+{
+    if(is_empty(stack))
+        return NULL;
+
+    node * rNode = stack->top;
+    stack->top = stack->top->next;
+
+    return rNode;
+}
+
+void print_queue(list * stack)
+{
+    if(is_empty(stack))
+    {
+        printf("=====EMPTY=====\n");
+        return;
+    }
+
+    printf("====QUEUE====\n");
+    int count = 0;
+    node * curr = stack->top;
+    while(curr != NULL)
+    {
+        printf("ENTRY %d : %d\n", count, curr->val);
+        curr = curr->next;
+        count++;
+    }
+
+    printf("====QUEUE====\n");
+}
