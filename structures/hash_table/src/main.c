@@ -1,5 +1,5 @@
-//#include "hash_table.h"
-#include "hash_table_ll.h"
+#include "hash_table.h"
+//#include "hash_table_ll.h"
 
 void test_hash_table(void);
 void test_hash_table_ll(void);
@@ -47,6 +47,6 @@ void test_hash_table_ll()
     insert("Jenny", 10);
     insert("Jenny", 20);
     print_table();
-    delete("Jenny", 10);
+    delete("Jenny");
     print_table();
 }

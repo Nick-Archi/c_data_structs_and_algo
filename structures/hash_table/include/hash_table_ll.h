@@ -26,7 +26,7 @@ typedef struct bucket_def
 bucket * table[TABLESIZE] = {NULL};
 
 // function to initialize space for linked list
-bucket * init_bucket(void)
+bucket * c(void)
 {
     bucket * temp = (bucket *)malloc(sizeof(bucket));
     memset(temp, 0x00, sizeof(bucket));
