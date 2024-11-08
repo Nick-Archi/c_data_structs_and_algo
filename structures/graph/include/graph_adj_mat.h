@@ -5,10 +5,10 @@
 
 typedef struct mygraph graph;
 
-graph* create_graph(int num);
-void destory_graph(graph* g);
-void print_graph(graph* g);
-bool add_edge(graph* g, unsigned int from_node, unsigned int to_node);
-bool has_edge(graph* g, unsigned int from_node, unsigned int to_node);
+graph* initializeGraph(int num_of_nodes);
+void destroyGraph(graph* g);
+void printAdjMap(graph* g);
+void addEdge(graph* g, int from, int to);
+bool hasEdge(graph* g, int from, int to);
 
 #endif //_GRAPH_ADJ_MAT_H_

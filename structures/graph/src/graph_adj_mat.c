@@ -1,47 +1,26 @@
-#include <assert.h>
-#include <stdlib.h>
+// implement a graph using an adjacency map in C
+
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <assert.h>
 
-#include "graph_adj_mat.h"
-
-struct mygraph
+typedef struct graph_t
 {
-	int numnodes;
-	bool **edges;
-};
+	int num_of_nodes;
+	bool** edges; // 2D matrix containing connections b/w nodes
+}graph;
 
-graph* create_graph(int num)
+void destroyGraph(graph* g)
 {
-	graph* new_graph = (graph*)calloc(sizeof(graph), 1);
-	if(new_graph == NULL)
+	if(g == NULL)
 	{
-		return new_graph;
-	}
-	new_graph->numnodes = num;
-
-	// allocate matrix down here...
-	new_graph->edges = (bool**)calloc(sizeof(bool*), new_graph->numnodes);
-	if(new_graph->edges == NULL)
-	{free(new_graph); return NULL;}
-
-	for(int i = 0; i < new_graph->numnodes; i++)
-	{
-		new_graph->edges[i] = calloc(sizeof(bool), new_graph->numnodes);
-		if(new_graph->edges[i] == NULL)
-		{
-			destory_graph(new_graph);
-			return NULL;
-		}
+		printf("graph is NULL\nExiting\n");
+		return;
 	}
 
-	return new_graph; 
-}
-void destory_graph(graph* g)
-{
-	if(g->edges == NULL)
-	return;
-
-	for(int i = 0; i < g->numnodes; i++)
+	for(int i = 0; i < g->num_of_nodes; i++)
 	{
 		if(g->edges[i] != NULL)
 		{
@@ -49,43 +28,96 @@ void destory_graph(graph* g)
 		}
 	}
 
-	free(g->edges);
-	free(g);
+    free(g->edges);
+    free(g);
+
+	printf("Graph deleted\n");
+	return;
 }
-void print_graph(graph* g)
+
+graph* initializeGraph(int num_of_nodes)
 {
-	printf("digraph {\n");
-	
-	for(int from = 0; from < g->numnodes; from++)
+	graph* g = (graph*)calloc(sizeof(graph), 1);
+	if(g == NULL)
 	{
-		for(int to = 0; to < g->numnodes; to++)
+		printf("Pointer Null\nExiting\n");
+		return NULL;
+	}
+
+	g->num_of_nodes = num_of_nodes;
+
+	// allocate space for 2D matrix
+	g->edges = (bool**)calloc(sizeof(bool*), num_of_nodes);
+	if(g->edges == NULL)
+	{
+		printf("g->edges NULL\nExiting\n");
+		free(g->edges);
+		return NULL;
+	}
+
+	// init each 1D vector in matrix
+	for(int i = 0; i < g->num_of_nodes; i++)
+	{
+		g->edges[i] = (bool*)calloc(sizeof(bool), num_of_nodes);
+		if(g->edges[i] == NULL)
 		{
-			if(g->edges[from][to])
-			{
-				printf("%d -> %d;\n", from, to);
-			}
+			printf("g->edges[%d] NULL\nExiting\n", i);
+            destroyGraph(g);
+			// destroy entire graph...
+			return NULL;
 		}
 	}
 
-	printf("}\n");
+	// grpah has been created..
+	return g;
 }
-bool add_edge(graph* g, unsigned int from_node, unsigned int to_node)
-{
-	if(g->edges == NULL)
-		return false;
 
-	if(has_edge(g, from_node, to_node))
-	{
-		return false;
-	}
-
-	g->edges[from_node][to_node] = true;
-	return true;
-}
-bool has_edge(graph* g, unsigned int from_node, unsigned int to_node)
+bool hasEdge(graph* g, int from, int to)
 {
 	assert(g != NULL);
-	assert(from_node < g->numnodes);
-	assert(to_node < g->numnodes);
-	return g->edges[from_node][to_node];
+	assert(from < g->num_of_nodes);
+	assert(to < g->num_of_nodes);
+
+	return g->edges[from][to];
+}
+
+void addEdge(graph* g, int from, int to)
+{
+	if(g == NULL)
+	{
+		printf("Graph Empty\n");
+		return;
+	}
+
+	if(hasEdge(g, from, to) == false)
+	{
+		g->edges[from][to] = true;
+		printf("Edge added from: %d, to: %d\n", from, to);
+		return;
+	}
+
+	printf("Edge already exists b/w from: %d, and to: %d\n", from, to);
+	return;
+}
+
+void printAdjMap(graph* g)
+{
+	if(g == NULL)
+	return; 
+
+	printf("digraph {\n");
+
+	for(int from = 0; from < g->num_of_nodes; from++)
+	{
+		for(int to = 0; to < g->num_of_nodes; to++)
+		{
+			if(hasEdge(g, from, to))
+			{
+				printf("%d -> %d;\n", from, to);
+			}
+			//printf("from: %d, to: %d = %d\n", rows, cols, g->edges[rows][cols]);
+		}
+	}
+
+    printf("}\n");
 }

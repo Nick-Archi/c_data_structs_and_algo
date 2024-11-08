@@ -128,7 +128,7 @@ Edge* createEdge(Node* node)
 	return new_edge;
 }
 
-void addEdge(Graph* g, int from, int to)
+void addEdge_s(Graph* g, int from, int to)
 {
 	if(g == NULL)
 	{
